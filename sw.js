@@ -1,6 +1,7 @@
 // we use self. which ref. service worker file it's self.
 
-const staticCache = "static-site-v1"
+const staticCache = "static-site" // App shall assets
+const dynamicCache = "dynamic-site"
 
 const assetsResources = [
   "/", // storing request url. index file
@@ -56,7 +57,15 @@ self.addEventListener("fetch", (event) => {
   // console.log("fetch event", evt)
   event.respondWith(
     caches.match(event.request).then((cachesResponse) => {
-      return cachesResponse || fetch(event.request)
+      return (
+        cachesResponse ||
+        fetch(event.request).then((fetchResponse) => {
+          return caches.open(dynamicCache).then((cache) => {
+            cache.put(event.request.url, fetchResponse.clone())
+            return fetchResponse
+          })
+        })
+      )
     })
   )
 })
