@@ -1,7 +1,7 @@
 // we use self. which ref. service worker file it's self.
 
 const staticCache = "static-site" // App shall assets
-const dynamicCache = "dynamic-site"
+const dynamicCaches = "dynamic-site-v2"
 
 const assetsResources = [
   "/", // storing request url. index file
@@ -14,7 +14,8 @@ const assetsResources = [
   "img/pizza.png",
   "img/icons",
   "https://fonts.googleapis.com/icon?family=Material+Icons",
-  "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
+  "https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2",
+  "pages/fallback.html"
 ]
 
 // install service worker
@@ -41,7 +42,9 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) => {
       // console.log(keys, "bkbkbkbk ")
       return Promise.all(
-        keys.filter((key) => key !== staticCache).map((item) => caches.delete(item))
+        keys
+          .filter((key) => key !== staticCache && key !== dynamicCaches)
+          .map((item) => caches.delete(item))
       )
     })
   )
@@ -56,17 +59,20 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   // console.log("fetch event", evt)
   event.respondWith(
-    caches.match(event.request).then((cachesResponse) => {
-      return (
-        cachesResponse ||
-        fetch(event.request).then((fetchResponse) => {
-          return caches.open(dynamicCache).then((cache) => {
-            cache.put(event.request.url, fetchResponse.clone())
-            return fetchResponse
+    caches
+      .match(event.request)
+      .then((cachesResponse) => {
+        return (
+          cachesResponse ||
+          fetch(event.request).then((fetchResponse) => {
+            return caches.open(dynamicCaches).then((cache) => {
+              cache.put(event.request.url, fetchResponse.clone())
+              return fetchResponse
+            })
           })
-        })
-      )
-    })
+        )
+      })
+      .catch(() => caches.match("/pages/fallback.html"))
   )
 })
 
