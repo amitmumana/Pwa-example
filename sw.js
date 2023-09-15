@@ -104,3 +104,31 @@ self.addEventListener("fetch", (event) => {
 //}
 // it will check index of .html in url. if not found then its return -1
 //we can add diffrents condition for image aur any other assets.for conditionally render.
+
+// OFFLINE FETCH //
+
+// self.addEventListener("fetch", (event) => {
+// console.log("fetch event", evt)
+// event.respondWith(
+//   caches
+//     .match(event.request)
+//     .then((cachesResponse) => {
+//       return (
+//         cachesResponse ||
+//         fetch(event.request).then((fetchResponse) => {
+//           return caches.open(dynamicCaches).then((cache) => {
+//             cache.put(event.request.url, fetchResponse.clone())
+//             limitCacheSize(dynamicCaches, 15)
+//             return fetchResponse
+//           })
+//         })
+//       )
+//     })
+//     .catch(() => {
+//       // conditional fallbacks
+//       if (event.request.url.indexOf(".html") > -1) {
+//         return caches.match("/pages/fallback.html")
+//       }
+//     })
+// )
+// })

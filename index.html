@@ -53,46 +53,7 @@
     </ul>
 
     <div class="recipes container grey-text text-darken-1">
-        <div class="card-panel recipe white row">
-            <img src="/img/pizza.png" alt="recipe thumb">
-            <div class="recipe-details">
-                <div class="recipe-title">hola pizza</div>
-                <div class="recipe-ingredients">capsicum, onians, garlic oil</div>
-            </div>
-            <div class="recipe-delete">
-                <i class="material-icons">delete_outline</i>
-            </div>
-        </div>
-        <div class="card-panel recipe white row">
-            <img src="/img/pizza.png" alt="recipe thumb">
-            <div class="recipe-details">
-                <div class="recipe-title">hola pizza</div>
-                <div class="recipe-ingredients">capsicum, onians, garlic oil</div>
-            </div>
-            <div class="recipe-delete">
-                <i class="material-icons">delete_outline</i>
-            </div>
-        </div>
-        <div class="card-panel recipe white row">
-            <img src="/img/pizza.png" alt="recipe thumb">
-            <div class="recipe-details">
-                <div class="recipe-title">hola pizza</div>
-                <div class="recipe-ingredients">capsicum, onians, garlic oil</div>
-            </div>
-            <div class="recipe-delete">
-                <i class="material-icons">delete_outline</i>
-            </div>
-        </div>
-        <div class="card-panel recipe white row">
-            <img src="/img/pizza.png" alt="recipe thumb">
-            <div class="recipe-details">
-                <div class="recipe-title">hola pizza</div>
-                <div class="recipe-ingredients">capsicum, onians, garlic oil</div>
-            </div>
-            <div class="recipe-delete">
-                <i class="material-icons">delete_outline</i>
-            </div>
-        </div>
+             
     </div>
 
     <div class="center">
@@ -120,26 +81,26 @@
         </form>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore-compat.js"></script>
+    <script>
 
-    <script type="module">
+     const firebaseConfig = {
+              apiKey: "AIzaSyAqYtTcyyvJLu3IjMPOnGtcIj0XWxt9i4U",
+              authDomain: "foujidhaba-9b75e.firebaseapp.com",
+              projectId: "foujidhaba-9b75e",
+              storageBucket: "foujidhaba-9b75e.appspot.com",
+              messagingSenderId: "640406981631",
+              appId: "1:640406981631:web:01e81e2c3819940454f5ca",
+              measurementId: "G-KM36L9BD7J"
+            };
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+       const firebaseApp = firebase.initializeApp(firebaseConfig);
+       var db = firebaseApp.firestore();
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyAqYtTcyyvJLu3IjMPOnGtcIj0XWxt9i4U",
-          authDomain: "foujidhaba-9b75e.firebaseapp.com",
-          projectId: "foujidhaba-9b75e",
-          storageBucket: "foujidhaba-9b75e.appspot.com",
-          messagingSenderId: "640406981631",
-          appId: "1:640406981631:web:01e81e2c3819940454f5ca",
-          measurementId: "G-KM36L9BD7J"
-        };
-      
-        const App = initializeApp(firebaseConfig)
-        const db = firebase.firestore()
-        console.log(db, "okokok", "okokok")
-        </script>
+    </script>
+
+   
 
     <script src="/js/db.js"></script>
     <script src="/js/app.js"></script>
