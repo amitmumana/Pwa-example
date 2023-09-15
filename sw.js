@@ -18,6 +18,18 @@ const assetsResources = [
   "pages/fallback.html"
 ]
 
+// Cache size limit function
+
+const limitCacheSize = (name, size) => {
+  caches.open(name).then((caches) => {
+    caches.keys().then((keys) => {
+      if (keys.length > size) {
+        caches.delete(keys[0]).then(limitCacheSize(name, size))
+      }
+    })
+  })
+}
+
 // install service worker
 
 self.addEventListener("install", (event) => {
@@ -58,25 +70,37 @@ self.addEventListener("activate", (event) => {
 // Serving > The fetch event
 self.addEventListener("fetch", (event) => {
   // console.log("fetch event", evt)
-  event.respondWith(
-    caches
-      .match(event.request)
-      .then((cachesResponse) => {
-        return (
-          cachesResponse ||
-          fetch(event.request).then((fetchResponse) => {
-            return caches.open(dynamicCaches).then((cache) => {
-              cache.put(event.request.url, fetchResponse.clone())
-              return fetchResponse
-            })
-          })
-        )
-      })
-      .catch(() => caches.match("/pages/fallback.html"))
-  )
+  // event.respondWith(
+  //   caches
+  //     .match(event.request)
+  //     .then((cachesResponse) => {
+  //       return (
+  //         cachesResponse ||
+  //         fetch(event.request).then((fetchResponse) => {
+  //           return caches.open(dynamicCaches).then((cache) => {
+  //             cache.put(event.request.url, fetchResponse.clone())
+  //             limitCacheSize(dynamicCaches, 15)
+  //             return fetchResponse
+  //           })
+  //         })
+  //       )
+  //     })
+  //     .catch(() => {
+  //       // conditional fallbacks
+  //       if (event.request.url.indexOf(".html") > -1) {
+  //         return caches.match("/pages/fallback.html")
+  //       }
+  //     })
+  // )
 })
 
 //WHATS HAPPENING HERE ?
 
 // caches try to match event.requests and if reuests match then retrun it self.
 // if not then try to fetch request from server.
+
+// if (event.request.url.indexOf(".html") > -1) {
+// return caches.match("/pages/fallback.html")
+//}
+// it will check index of .html in url. if not found then its return -1
+//we can add diffrents condition for image aur any other assets.for conditionally render.
