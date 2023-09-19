@@ -1,7 +1,7 @@
 // we use self. which ref. service worker file it's self.
 
-const staticCache = "static-site" // App shall assets
-const dynamicCaches = "dynamic-site-v2"
+const staticCache = "static-site-v1" // App shall assets
+const dynamicCaches = "dynamic-site-v1"
 
 const assetsResources = [
   "/", // storing request url. index file
@@ -69,29 +69,32 @@ self.addEventListener("activate", (event) => {
 
 // Serving > The fetch event
 self.addEventListener("fetch", (event) => {
-  // console.log("fetch event", evt)
-  // event.respondWith(
-  //   caches
-  //     .match(event.request)
-  //     .then((cachesResponse) => {
-  //       return (
-  //         cachesResponse ||
-  //         fetch(event.request).then((fetchResponse) => {
-  //           return caches.open(dynamicCaches).then((cache) => {
-  //             cache.put(event.request.url, fetchResponse.clone())
-  //             limitCacheSize(dynamicCaches, 15)
-  //             return fetchResponse
-  //           })
-  //         })
-  //       )
-  //     })
-  //     .catch(() => {
-  //       // conditional fallbacks
-  //       if (event.request.url.indexOf(".html") > -1) {
-  //         return caches.match("/pages/fallback.html")
-  //       }
-  //     })
-  // )
+  if (event.request.url.indexOf("firestore.googleapis.com") === -1) {
+    self.addEventListener("fetch", (event) => {
+      event.respondWith(
+        caches
+          .match(event.request)
+          .then((cachesResponse) => {
+            return (
+              cachesResponse ||
+              fetch(event.request).then((fetchResponse) => {
+                return caches.open(dynamicCaches).then((cache) => {
+                  cache.put(event.request.url, fetchResponse.clone())
+                  limitCacheSize(dynamicCaches, 15)
+                  return fetchResponse
+                })
+              })
+            )
+          })
+          .catch(() => {
+            // conditional fallbacks
+            if (event.request.url.indexOf(".html") > -1) {
+              return caches.match("/pages/fallback.html")
+            }
+          })
+      )
+    })
+  }
 })
 
 //WHATS HAPPENING HERE ?
@@ -106,29 +109,3 @@ self.addEventListener("fetch", (event) => {
 //we can add diffrents condition for image aur any other assets.for conditionally render.
 
 // OFFLINE FETCH //
-
-// self.addEventListener("fetch", (event) => {
-// console.log("fetch event", evt)
-// event.respondWith(
-//   caches
-//     .match(event.request)
-//     .then((cachesResponse) => {
-//       return (
-//         cachesResponse ||
-//         fetch(event.request).then((fetchResponse) => {
-//           return caches.open(dynamicCaches).then((cache) => {
-//             cache.put(event.request.url, fetchResponse.clone())
-//             limitCacheSize(dynamicCaches, 15)
-//             return fetchResponse
-//           })
-//         })
-//       )
-//     })
-//     .catch(() => {
-//       // conditional fallbacks
-//       if (event.request.url.indexOf(".html") > -1) {
-//         return caches.match("/pages/fallback.html")
-//       }
-//     })
-// )
-// })
