@@ -1,4 +1,4 @@
-const notes = document.querySelector(".recipes")
+const notes = document.querySelector(".items")
 
 document.addEventListener("DOMContentLoaded", function () {
   // nav menu
@@ -26,4 +26,13 @@ const renderDoc = (data, id) => {
   `
 
   notes.innerHTML += html
+}
+
+// remove item from DOM //
+// .items[data-id=${id} this is attribute selector
+// remove() is dom method
+
+const removeItem = (id) => {
+  const item = document.querySelector(`.recipe[data-id=${id}]`)
+  item.remove()
 }

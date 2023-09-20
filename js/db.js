@@ -1,4 +1,3 @@
-// real-time listener . which will get chages of doc //
 db.enablePersistence().catch((err) => {
   if (err.code == "failed-precondition") {
     // may be multipale tabs open once
@@ -8,6 +7,8 @@ db.enablePersistence().catch((err) => {
     console.log("persistence not avilable")
   }
 })
+
+// real-time listener . which will get chages of doc //
 
 db.collection("menu").onSnapshot((items) => {
   items.docChanges().forEach((element) => {
@@ -19,28 +20,41 @@ db.collection("menu").onSnapshot((items) => {
     }
     if (element.type === "removed") {
       // remove the document
+      removeItem(element.doc.id)
     }
   })
 })
 
-var title = document.getElementById("title")
-var ingredients = document.getElementById("ingredients")
+// Adding item
+
+const form = document.querySelector("form")
 
 form.addEventListener("submit", (event) => {
   event.preventDefault()
 
-  console.log(title.value)
-  console.log(ingredients.value)
-
-  const recipe = {
-    // title: title,
-    // ingredients: ingredients
+  const items = {
+    title: form.title?.value,
+    ingredients: form.ingredients.value
   }
 
-  // db.collection("menu")
-  //   .add(recipe)
-  //   .catch((err) => console.log(err, "this is error while adding doc"))
+  db.collection("menu")
+    .add(items)
+    .catch((err) => {
+      console.log(err, "this is error while adding item to db")
+    })
 
-  title = ""
-  ingredients = ""
+  form.title.value = ""
+  form.ingredients.value = ""
+})
+
+// deleting item //
+
+const container = document.querySelector(".items")
+
+container.addEventListener("click", (event) => {
+  if (event.target.tagName === "I") {
+    const id = event.target.getAttribute("data-id")
+
+    db.collection("menu").doc(id).delete()
+  }
 })
