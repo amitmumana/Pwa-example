@@ -1,7 +1,7 @@
 // we use self. which ref. service worker file it's self.
 
-const staticCache = "static-site-v1" // App shall assets
-const dynamicCaches = "dynamic-site-v1"
+const staticCache = "static-site-v2" // App shall assets
+const dynamicCaches = "dynamic-site-v2"
 
 const assetsResources = [
   "/", // storing request url. index file
